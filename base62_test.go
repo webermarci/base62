@@ -5,18 +5,30 @@ import (
 	"math"
 	"math/big"
 	"testing"
+	"time"
 )
 
 func TestEncoding(t *testing.T) {
-	for i := 0; i <= 1000000; i++ {
-		encoded := Encode(uint64(i))
+	testData := []uint64{
+		0,
+		1,
+		42,
+		69,
+		uint64(time.Now().Unix()),
+		uint64(time.Now().UnixMilli()),
+		uint64(time.Now().UnixMicro()),
+		uint64(time.Now().UnixNano()),
+	}
+
+	for _, number := range testData {
+		encoded := Encode(number)
 		decoded, err := Decode(encoded)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		if uint64(i) != decoded {
-			t.Fatalf("%d != %d", int64(i), decoded)
+		if number != decoded {
+			t.Fatalf("%d != %d", number, decoded)
 		}
 	}
 }
